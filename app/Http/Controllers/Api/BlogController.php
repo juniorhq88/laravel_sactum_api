@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BlogCollection;
 use App\Http\Resources\BlogResource;
 use App\Models\Blog;
 use App\Traits\ApiResponse;
@@ -28,7 +29,11 @@ class BlogController extends Controller
     {
         $user_id = auth()->user()->id; //capturamos el ID del usuario
         $blogs = $this->repository->where('user_id', $user_id)->paginate();
-        return $this->okApiResponse(BlogResource::collection($blogs)->toArray());
+
+        return $this->successApiResponse([
+            'status' => 1,
+            'data' => new BlogResource($blogs)
+        ]);
     }
 
     /**
@@ -72,7 +77,7 @@ class BlogController extends Controller
             $info = Blog::where(["id" => $id, "user_id" => $user_id])->get();
             return $this->successApiResponse([
                 "status" => 1,
-                "msg" => $info
+                "msg" => BlogResource::collection($info)
             ]);
         }
 
