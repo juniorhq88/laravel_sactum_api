@@ -27,7 +27,7 @@ Route::group(['middleware' => ["auth:sanctum"]], function () {
 
 
     //Blog
-    Route::apiResource('blog', 'BlogController');
+    Route::apiResource('blog', BlogController::class);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
